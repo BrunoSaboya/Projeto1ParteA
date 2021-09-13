@@ -22,14 +22,14 @@ def read_file(path):
         return binary
 
 def load_data(nomeJson):
-    filePath = "data/"+nomeJson
+    filePath = "Handout1/data/"+nomeJson
     with open(filePath, "rt", encoding="utf-8") as text:
         content = text.read()
         contentPython = json.loads(content)
         return contentPython
 
 def load_template(file_path):
-    file = open("templates/"+file_path)
+    file = open("Handout1/templates/"+file_path)
     content = file.read()
     file.close()
     return content
@@ -38,7 +38,7 @@ def adiciona_dic(dicionario):
     read = load_data('notes.json')
     read.append(dicionario)
     dicionario = json.dumps(read)
-    with open('data/notes.json', "w", encoding="uft-8") as text:
+    with open('Handout1/data/notes.json', "w", encoding="uft-8") as text:
         content = text.write(dicionario)
 
 def build_response(body='', code=200, reason='OK', headers=''):
