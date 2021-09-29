@@ -1,25 +1,22 @@
 import json
-from os import write
+from json import encoder
+import os
 
-def extract_route(requisicao):
-    if requisicao.startswith('GET'):
-        lista1 = requisicao.split("GET /")
-    else:
-        lista1 = requisicao.split("POST /")
-
-    lista2 = lista1[1].split(" ")
-    return lista2[0]
+def extract_route(request):
+    filename=''
+    if len(request.split())>0:
+        filename = request.split()[1][1:]
+    return filename
 
 def read_file(path):
-    lista = str(path).split(".")
-    if lista[-1]=="txt" or lista[-1]=="html" or lista[-1]=="css" or lista[-1]=="js":
-        with open(path, "rt") as file:
-            text = file.read()
-            return text
+    filename, file_extension = os.path.splitext('/path/to/somefile.ext')
+    extensions_list = [".txt", ".html", ".css", ".js"]
+    if file_extension in extensions_list:
+        file = open(path, "rt")
+        return file.read()
     else:
-        with open(path, "rb") as file:
-            binary = file.read()
-        return binary
+        file = open(path, "rb")
+        return file.read()
 
 def load_data(nomeJson):
     filePath = "Handout1/data/"+nomeJson
@@ -29,7 +26,7 @@ def load_data(nomeJson):
         return contentPython
 
 def load_template(file_path):
-    file = open("Handout1/templates/"+file_path)
+    file = open("Handout1/templates/"+file_path, 'r', encoding="utf-8")
     content = file.read()
     file.close()
     return content
@@ -42,8 +39,42 @@ def adiciona_dic(dicionario):
         content = text.write(dicionario)
 
 def build_response(body='', code=200, reason='OK', headers=''):
-    if headers:
-        headers=f"\n{headers}"
-    response=f"HTTP/1.1{code} {reason}{headers}\n\n{body}".encode()
-    return response
+    if headers == "":
+        skip = ""
+    else:
+        skip = "\n"
+    if isinstance(body,str):
+        body = body.encode()
+    return ("HTTP/1.1 "+f"{code} "+reason+skip+headers+"\n\n").encode()+body
     
+def extract_route(request):
+    filename=''
+    if len(request.split())>0:
+        filename = request.split()[1][1:]
+    return filename
+
+def read_file(path):
+    filename, file_extension = os.path.splitext('/path/to/somefile.ext')
+    extensions_list = [".txt", ".html", ".css", ".js"]
+    if file_extension in extensions_list:
+        file = open(path, "rt")
+        return file.read()
+    else:
+        file = open(path, "rb")
+        return file.read()
+
+# def load_data(banco):
+#     db = Database(banco)
+#     notes:list[Note] = db.get_all()
+#     return notes
+
+
+
+# def build_response(body='', code=200, reason='OK', headers=''):
+#     if headers == "":
+#         skip = ""
+#     else:
+#         skip = "\n"
+#     if isinstance(body,str):
+#         body = body.encode()
+#     return ("HTTP/1.1 "+f"{code} "+reason+skip+headers+"\n\n").encode()+body
